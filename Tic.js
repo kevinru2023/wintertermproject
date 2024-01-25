@@ -12,13 +12,13 @@ document.addEventListener("DOMContentLoaded", function(event){
         {
             if(currentplayer == "x")
             {
-                document.getElementById(button).src="chainsaws.jpg"; 
+                button.style.backgroundImage ="chainsaws.jpg"; 
                 square = 1; 
                 currentplayer = "o"; 
             }
             else if(currentplayer == "o")
             {
-                document.getElementById(button).src="log.jpg"; 
+                button.style.backgroundImage="log.jpg"; 
                 square = 2; 
                 currentplayer = "x"; 
             }
