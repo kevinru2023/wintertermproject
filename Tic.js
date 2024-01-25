@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 square = 1; 
                 currentplayer = "o"; 
             }
-            elif(currentplayer == "o")
+            else if(currentplayer == "o")
             {
                 document.getElementById(button).src="log.jpg"; 
                 square = 2; 
@@ -25,6 +25,11 @@ document.addEventListener("DOMContentLoaded", function(event){
         } 
         
     }
+    
+    document.getElementById("b1").addEventListener("Click",change("b1", s1));
+    document.getElementById("b2").addEventListener("Click",change("b2"), s2); 
+    document.getElementById("b3").addEventListener("Click",change("b3", s3)); 
+    document.getElementById("b4")
     
 }
 })
