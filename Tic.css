@@ -1,8 +1,9 @@
-.button { 
-    background-image: url('path-to-your-image.jpg'); 
-    width:20;
-    height:20;
-    padding:10;
-    border-radius:10;
+.button button{ 
+    background-image: none;  
+    background-color: aqua;
+    width: 200px;
+    height:150px;
+    padding:100px;
+    border-radius:10px;
     /* Other button styles */ 
-  } 
+  }   

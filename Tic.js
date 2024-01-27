@@ -8,17 +8,18 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     function change(button, square)
     {
-        if(square == 0 && win != true)
+        let bttn = document.getElementById(button) 
+        if(square === 0 && win != true)
         {
-            if(currentplayer == "x")
+            if(currentplayer === "x")
             {
-                button.style.backgroundImage ="chainsaws.jpg"; 
+                bttn.style.backgroundImage="chainsaws.jpg"; 
                 square = 1; 
                 currentplayer = "o"; 
             }
-            else if(currentplayer == "o")
+            else if(currentplayer === "o")
             {
-                button.style.backgroundImage="log.jpg"; 
+                bttn.style.backgroundImage="log.jpg"; 
                 square = 2; 
                 currentplayer = "x"; 
             }
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function(event){
         
     }
     
-    document.getElementById("b1").addEventListener("Click",change("b1", s1));
+    document.getElementById("b1").addEventListener("Click",change.bind(null, "b1", s1));
     document.getElementById("b2").addEventListener("Click",change("b2", s2)); 
     document.getElementById("b3").addEventListener("Click",change("b3", s3)); 
     document.getElementById("b4").addEventListener("Click",change("b4", s4)); 
