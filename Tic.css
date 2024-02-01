@@ -1,15 +1,21 @@
-.button button{ 
-    background-image: none;  
-    background-color: aqua;
-    width: 200px;
-    height:150px;
-    padding:100px;
-    border-radius:10px;
-    /* Other button styles */ 
-  }   
-  #b1{
-    background-image: none; 
-  }
-  #b2{
-    background-image: none; 
-  }
+.button button{
+  background-color: aqua;
+  width: 200px;
+  height:150px;
+  padding:100px;
+  border-radius:10px;
+}
+
+#b1{
+  background-image: none;
+  transition-duration: 0.4s; 
+  ;
+}
+#b2{
+  background-image: none; 
+}
+
+button button:hover {
+  background-color: #04AA6D; / Green */
+  color: white;
+} 
