@@ -23,11 +23,17 @@ document.addEventListener("DOMContentLoaded", function(event){
                 square = 2; 
                 currentplayer = "x"; 
             }
+            else
+            {
+                return 1; 
+            }
         } 
+        return 0; 
+            
         
     }
     
-    document.getElementById("b1").addEventListener("Click",change.bind(null, "b1", s1));
+    document.getElementById("b1").addEventListener("Click",change("b1", s1));
     document.getElementById("b2").addEventListener("Click",change("b2", s2)); 
     document.getElementById("b3").addEventListener("Click",change("b3", s3)); 
     document.getElementById("b4").addEventListener("Click",change("b4", s4)); 
