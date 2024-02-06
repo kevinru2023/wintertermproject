@@ -1,21 +1,24 @@
-.button button{
+/*for the way we have it setup to change style of all buttons you would change something in grid-container grid item button*/
+/*for styling in terms of the grid you would only change the grid-container styling*/
+/*still figuring out how to change each button id styling using javascript*/
+.grid-container {
+  display: inline-grid;
+  grid-template-columns: auto auto auto;
+  
+}
+
+.grid-container .grid-item button{
+  padding:10px; 
   background-color: rgb(255, 128, 0);
   width: 200px;
   height: 150px;
-  padding: 10px; /* Adjusted padding */
+  padding: 10px;
   border-radius: 10px;
+  text-align: center;
   transition-duration: 0.4s;
 }
 
-#b1 {
-  background-image: none;
-}
-
-#b2 {
-  background-image: none;
-}
-
-.button button:hover {
+.grid-container .grid-item button:hover {
   background-color: #000000;
-  color: rgb(243, 97, 0);
+  color: rgb(255, 128, 0);
 }
