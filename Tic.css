@@ -1,12 +1,13 @@
-/*for the way we have it setup to change style of all buttons you would change something in grid-container grid item button*/
+ /*for the way we have it setup to change style of all buttons you would change something in grid-container grid item button*/
 /*for styling in terms of the grid you would only change the grid-container styling*/
 /*still figuring out how to change each button id styling using javascript*/
 .grid-container {
   display: inline-grid;
   grid-template-columns: auto auto auto;
-  
+  margin-top: 30px;
 }
 
+/* Controls Size of Grid */
 .grid-container .grid-item button{
   padding:10px; 
   background-color: rgb(255, 128, 0);
@@ -18,7 +19,101 @@
   transition-duration: 0.4s;
 }
 
+/* Controls Color of Hover */
 .grid-container .grid-item button:hover {
   background-color: #000000;
   color: rgb(255, 128, 0);
 }
+
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: rgb(255, 128, 0);
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #000000;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: black;
+  color: white;
+}
+
+/* Add a color to the current link */
+.topnav a.active {
+  background-color: black;
+  color: rgb(255, 128, 0);
+}
+
+.card {
+  /* Add shadows to create card */
+  box-shadow: 0 4px 8px 0 black;
+  transition: 0.3s;
+  width: 250px;
+}
+
+/* Hover */
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgb(255, 128, 0);
+}
+
+/* Add padding inside the card container */
+.container {
+  padding: 2px 16px;
+}
+
+/* Makes Links not look like links */
+a { 
+  color: black; 
+  text-decoration: none; 
+  cursor: auto; 
+ } 
+
+
+#b1{
+  background-image: url("chainsaws.jpg");  
+  background-size: auto;
+}
+
+#b2{
+  background-image: none;  
+}
+
+#b3{
+  background-image: none;  
+}
+
+#b4{
+  background-image: none;  
+}
+
+#b5{
+  background-image: none;  
+}
+
+#b6{
+  background-image: none;  
+}
+
+#b7{
+  background-image: none;  
+}
+
+#b8{
+  background-image: none;  
+}
+
+#b9{
+  background-image: none;  
+}
+
+
+
