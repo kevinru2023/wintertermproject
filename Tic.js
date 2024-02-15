@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function(event){
 {
-    let win  = false; 
     let currentplayer = "x";
     let squares = [0,0,0,
                    0,0,0,
@@ -9,68 +8,78 @@ document.addEventListener("DOMContentLoaded", function(event){
     //so if s[0] = 0 then no player has clicked it, if s[0] = 1 player x has clicked it, if s[0] = 2 then player o has clicked it
 
     
-    function checkwin(arr)
-    {
-        if(arr[0] == arr[1] == arr[2])
-        {
+    function checkwin(arr) {
+        let win = false; 
+        if (arr[0] == arr[1] && arr[1] == arr[2] && arr[0] != 0) {
             win = true; 
-        }
-        else if(arr[3] == arr[4]== arr[5])
-        {
-            win = true; 
-        }
-        else if(arr[6] == arr[7]== arr[8])
-        {
-            win = true; 
-        }
-        else if(arr[0] == arr[3]== arr[6])
-        {
-            win = true; 
-        }
-        else if(arr[1] == arr[4]== arr[7])
-        {
-            win = true; 
-        }
-        else if(arr[2] == arr[5]== arr[8])
-        {
-            win = true; 
-        }
-        else if(arr[0] == arr[4]== arr[8])
-        {
-            win = true; 
-        }
-        else if(arr[2] == arr[4]== arr[6])
-        {
-            win = true; 
-        }
+        } 
         
-        else;
+        else if (arr[3] == arr[4] && arr[4] == arr[5] && arr[5] != 0) {
+            win = true; 
+        } 
+        
+        else if (arr[6] == arr[7] && arr[7] == arr[8] && arr[8] != 0) {
+            win = true; 
+        } 
+        
+        else if (arr[0] == arr[3] && arr[3] == arr[6] && arr[0] != 0) {
+            win = true; 
+        } 
+        
+        else if (arr[1] == arr[4] && arr[4] == arr[7] && arr[7] != 0) {
+            win = true; 
+        } 
+        
+        else if (arr[2] == arr[5] && arr[5] == arr[8] && arr[2] != 0) {
+            win = true; 
+        } 
+        
+        else if (arr[0] == arr[4] && arr[4] == arr[8] && arr[0] != 0) {
+            win = true; 
+        } 
+        
+        else if (arr[2] == arr[4] && arr[4] == arr[6] && arr[2] != 0) {
+            win = true; 
+        } 
+        
+        else {
             win = false; 
-        
-
+        }
+        return win; 
     }
+    
     
     // things to do still, make it so the win function is called and print winners, and also fix image sizing 
     //heavily changed code here by the help of chat gpt because scope in javascript is stupid, and I can't belive im saying this but c pointers and memeory is clutch
     function change(index)
     {
         let bttn = document.getElementById("b" + (index+1));
-        console.log(bttn)
-        if(squares[index] == 0 && win != true)
+        
+        if(squares[index] == 0 && checkwin(squares) != true)
         {
             if(currentplayer == "x")
             {
                 console.log("x player")
-                bttn.style.backgroundImage="chainsaws.jpg";
+                bttn.style.backgroundImage="url(chainsaws.jpg)";
+                bttn.style.backgroundSize='200px 150px';
                 squares[index] = 1; 
                 currentplayer = "o"; 
+                if(checkwin(squares) == true)
+                {
+                    console.log("Player x wins!")
+                }
             }
             else if(currentplayer == "o")
             {
                 console.log("o player")
-                bttn.style.backgroundImage="log.jpg"; 
+                bttn.style.backgroundImage="url(log.jpg)"; 
+                bttn.style.backgroundSize='200px 150px'
                 squares[index] = 2; 
                 currentplayer = "x"; 
+                if(checkwin(squares) == true)
+                {
+                    console.log("Player o wins!")
+                }
             }
             else
             {
@@ -78,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function(event){
             }
 
         } 
+        console.log(squares)
         return 0; 
             
         
