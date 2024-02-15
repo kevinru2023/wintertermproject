@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 currentplayer = "o"; 
                 if(checkwin(squares) == true)
                 {
-                    console.log("Player x wins!")
+                    alert("Player x wins!")
                 }
             }
             else if(currentplayer == "o")
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function(event){
                 currentplayer = "x"; 
                 if(checkwin(squares) == true)
                 {
-                    console.log("Player o wins!")
+                    alert("Player o wins!")
                 }
             }
             else
