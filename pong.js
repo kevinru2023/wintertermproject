@@ -2,6 +2,7 @@ const canvas = document.getElementById("gamearea");
 const ctx = canvas.getContext("2d"); 
  //alot of what I am using is thanks to this tutorial in a different progrmaming language: https://www.instructables.com/Pong-With-Processing/ 
  //I'm also using a youtube tutorial that I was recommended to understand how to draw in js: https://www.youtube.com/watch?v=UUFPEgRKwf4
+ //and of course lots of chatgpt to debug, I love chatgpt for debugging. 
 
  //initializing our game screen 
  function clearScreen(){
