@@ -1,18 +1,30 @@
-const canvas = document.getElementById("gamearea"); 
-const ctx = canvas.getContext("2d"); 
- //alot of what I am using is thanks to this tutorial in a different progrmaming language: https://www.instructables.com/Pong-With-Processing/ 
+//alot of what I am using is thanks to this tutorial in a different progrmaming language: https://www.instructables.com/Pong-With-Processing/ 
  //I'm also using a youtube tutorial that I was recommended to understand how to draw in js: https://www.youtube.com/watch?v=UUFPEgRKwf4
  //and of course lots of chatgpt to debug, I love chatgpt for debugging. 
 
- //initializing our game screen 
- function clearScreen(){
+const canvas = document.getElementById("gamearea"); 
+const ctx = canvas.getContext("2d"); 
+
+let cwidth = canvas.width; 
+let cheight = canvas.height; 
+console.log(cwidth); 
+
+//these are the x and y cords of the ball as well as the diameter 
+let ballw = 200; 
+let ballh= 200; 
+let balld = 50; 
+
+//using this function from math.random docs to generate random int between two values 
+function randomint(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
+}
+  
+//game screen
+function clearScreen(){
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0 , canvas.width, canvas.height);
-}
-
-//game loop 
-function drawGame(){
-    clearScreen(); 
 }
 
 //all things related to the ball, ps I hate javascript. 
@@ -34,7 +46,34 @@ class ballClass{
         this.y += this.speedY; 
         this.x += this.speedX; 
     }
-
+    
+    //functions that help with collision detection of ball. 
+    left(){
+        return this.x - this.diameter/2; 
+    }
+    right(){
+        return this.x + this.diameter/2;
+    }
+    up(){
+        return this.y + this.diameter/2; 
+    }
+    down(){
+        return this.y - this.diameter/2; 
+    }
 }
 
+//bunch of setup stuff for ball probably should do this in a function but nawwwwww 
+let Ball = new ballClass(ballw,ballh,balld); 
+Ball.speedX = 5; 
+Ball.speedY = randomint(-3,3); 
+
+
+//game loop 
+function drawGame(){
+    clearScreen(); 
+    Ball.move();
+    Ball.draw();
+    requestAnimationFrame(drawGame);
+    //requestanimation frame could be thought of as a way to recursivly call the function but being in sync with the refresh rate, shotout to chatgpt the best mentor on me understanding this cursed function
+}
 drawGame();
