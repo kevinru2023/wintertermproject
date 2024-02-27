@@ -7,7 +7,6 @@ const ctx = canvas.getContext("2d");
 
 let cwidth = canvas.width; 
 let cheight = canvas.height; 
-console.log(cwidth); 
 
 //these are the x and y cords of the ball as well as the diameter 
 let ballw = 200; 
