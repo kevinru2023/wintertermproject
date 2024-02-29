@@ -13,6 +13,7 @@ let ballw = 200;
 let ballh= 200; 
 let balld = 50; 
 
+
 //using this function from math.random docs to generate random int between two values 
 function randomint(min, max) {
     const minCeiled = Math.ceil(min);
@@ -40,6 +41,19 @@ class ballClass{
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.diameter / 2, 0, Math.PI*2 );
         ctx.fill();
+
+        if(this.right() > cwidth){
+            this.speedX = -this.speedX; 
+        }
+        if(this.left() < 0){
+            this.speedX = -this.speedX; 
+        }
+        if(this.top() > cheight){
+            this.speedY = -this.speedY; 
+        }
+        if(this.bottom() < 0){
+            this.speedY = -this.speedY; 
+        }
     }
     move(){
         this.y += this.speedY; 
@@ -53,14 +67,47 @@ class ballClass{
     right(){
         return this.x + this.diameter/2;
     }
-    up(){
+    top(){
         return this.y + this.diameter/2; 
     }
-    down(){
+    bottom(){
         return this.y - this.diameter/2; 
     }
 }
 
+class paddleClass{
+    constructor(tempX, tempY,tempWidth, tempHeight){
+        this.x = tempX; 
+        this.y = tempY; 
+        this.speedX = 0; 
+        this.speedY = 0; 
+        this.width = tempWidth; 
+        this.height = tempHeight; 
+    }
+    draw(){
+        ctx.fillStyle = "white";
+        ctx.beginPath(); 
+        ctx.rect(this.x, this.y, this.width, this.height); 
+        ctx.fill(); 
+    }
+    move(){
+        this.y += this.speedY; 
+        this.x += this.speedX; 
+    }
+    //the reason for subtracting or adding width or height is because the x,y is the center of the paddle. 
+    left(){
+        return this.x - this.width/2; 
+    }
+    right(){
+        return this.x + this.width/2; 
+    }
+    top(){
+        return this.y + this.height/2; 
+    }
+    bottom(){
+        return this.y - this.height/2; 
+    }
+}
 //bunch of setup stuff for ball probably should do this in a function but nawwwwww 
 let Ball = new ballClass(ballw,ballh,balld); 
 Ball.speedX = 5; 
