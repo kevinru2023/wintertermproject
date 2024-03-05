@@ -13,6 +13,21 @@ let ballw = 200;
 let ballh= 200; 
 let balld = 50; 
 
+//left paddle vars
+let pleftx= 0; 
+let plefty = 200; 
+let pleftw = 100; 
+let plefth = 200; 
+
+//right paddle vars 
+let prightx = 0; 
+let prighty = 0; 
+let prightw = 0; 
+let prighth = 0; 
+
+//vars to handle keyinputs 
+let up = false; 
+let down = false; 
 
 //using this function from math.random docs to generate random int between two values 
 function randomint(min, max) {
@@ -25,6 +40,53 @@ function randomint(min, max) {
 function clearScreen(){
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0 , canvas.width, canvas.height);
+}
+
+function inputs(cobject){
+    //if the user is moving the paddle up and not down, move the paddle up
+    if (up && !down){
+        cobject.speedY = -3; 
+    } 
+    //if the user is moving the paddle down and not up, move the paddle down
+    else if (down && !up) {
+        cobject.speedY = 3; 
+    } 
+    //if the user isn't pressing any keys or pressing both at the same time, don't move the paddle 
+    else {
+        cobject.speedY = 0; 
+    }
+}
+
+//if the user presses the key
+function keyDown(event){
+    if (event.keyCode == 38){
+        up = true; 
+    }
+    if (event.keyCode == 40){
+        down= true; 
+    }
+}
+
+//if the user lets go of the key 
+function keyUp(event){
+    if (event.keyCode == 38){
+        up = false; 
+    }
+    if (event.keyCode == 40){
+        down = false; 
+    }
+}
+
+//game loop 
+function drawGame(){
+    clearScreen(); 
+    Ball.move();
+    Ball.draw();
+    inputs(PaddleLeft);
+    PaddleLeft.move();
+    PaddleLeft.draw();     
+    requestAnimationFrame(drawGame);
+    //requestanimation frame could be thought of as a way to recursivly call the function but being in sync with the refresh rate, shotout to chatgpt the best mentor on me understanding this cursed function
 }
 
 //all things related to the ball, ps I hate javascript. 
@@ -87,8 +149,15 @@ class paddleClass{
     draw(){
         ctx.fillStyle = "white";
         ctx.beginPath(); 
-        ctx.rect(this.x, this.y, this.width, this.height); 
+        ctx.rect(this.x-this.width/2, this.y-this.height/2, this.width, this.height); 
         ctx.fill(); 
+
+        if(this.top() > cheight){
+            this.y = cheight - this.height/2; 
+        }
+        if(this.bottom() < 0){
+            this.y = this.height/2; 
+        }
     }
     move(){
         this.y += this.speedY; 
@@ -108,18 +177,14 @@ class paddleClass{
         return this.y - this.height/2; 
     }
 }
-//bunch of setup stuff for ball probably should do this in a function but nawwwwww 
+//bunch of setup stuff probably should do this in a function but nawwwwww 
 let Ball = new ballClass(ballw,ballh,balld); 
 Ball.speedX = 5; 
 Ball.speedY = randomint(-3,3); 
 
+let PaddleLeft = new paddleClass(pleftx, plefty, pleftw, plefth);
 
-//game loop 
-function drawGame(){
-    clearScreen(); 
-    Ball.move();
-    Ball.draw();
-    requestAnimationFrame(drawGame);
-    //requestanimation frame could be thought of as a way to recursivly call the function but being in sync with the refresh rate, shotout to chatgpt the best mentor on me understanding this cursed function
-}
+
+document.body.addEventListener("keydown",keyDown)
+document.body.addEventListener("keyup",keyUp)
 drawGame();
