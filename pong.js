@@ -14,13 +14,13 @@ let ballh= 200;
 let balld = 50; 
 
 //left paddle vars
-let pleftx= 50; 
+let pleftx= 0; 
 let plefty = 200; 
 let pleftw = 50; 
 let plefth = 200; 
 
 //right paddle vars 
-let prightx = 750; 
+let prightx = 800; 
 let prighty = 200; 
 let prightw = 50; 
 let prighth = 200; 
@@ -77,17 +77,18 @@ function keyUp(event){
     }
 }
 
-function checkcollosions(b, p1, p2){
-    
+function checkcollisions(b, p1, p2){
     if (b.left() < p1.right() && b.y > p1.top() && b.y < p1.bottom()) {
         b.speedX = -b.speedX;
-        console.log("checked first statement");
     }
     
     if (b.right() > p2.left() && b.y > p2.top() && b.y < p2.bottom()) {
         b.speedX = -b.speedX;
     }
 }
+
+
+
 
 //game loop 
 function drawGame(){
@@ -101,7 +102,7 @@ function drawGame(){
     
     PaddleLeft.draw();    
     PaddleRight.draw(); 
-    checkcollosions(Ball, PaddleLeft, PaddleRight);
+    checkcollisions(Ball, PaddleLeft, PaddleRight);
     requestAnimationFrame(drawGame);
     //requestanimation frame could be thought of as a way to recursivly call the function but being in sync with the refresh rate, shotout to chatgpt the best mentor on me understanding this cursed function
 }
@@ -170,11 +171,11 @@ class paddleClass{
         ctx.rect(this.x-this.width/2, this.y-this.height/2, this.width, this.height); 
         ctx.fill(); 
 
-        if(this.top() > cheight){
-            this.y = cheight - this.height/2; 
-        }
-        if(this.bottom() < 0){
+        if(this.top() < 0){
             this.y = this.height/2; 
+        }
+        if(this.bottom() > cheight){
+            this.y = cheight - this.height/2;
         }
     }
     move(){
@@ -189,10 +190,10 @@ class paddleClass{
         return this.x + this.width/2; 
     }
     top(){
-        return this.y + this.height/2; 
+        return this.y - this.height/2; 
     }
     bottom(){
-        return this.y - this.height/2; 
+        return this.y + this.height/2; 
     }
 }
 //bunch of setup stuff probably should do this in a function but nawwwwww 
