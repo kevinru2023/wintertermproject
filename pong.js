@@ -141,7 +141,7 @@ function drawGame(){
     //requestanimation frame could be thought of as a way to recursivly call the function but being in sync with the refresh rate, shotout to chatgpt the best mentor on me understanding this cursed function
 }
 
-//all things related to the ball, ps I hate javascript. 
+
 class ballClass{
     constructor(tempX, tempY, tempDiameter){
         this.x = tempX; 
