@@ -66,20 +66,27 @@ document.addEventListener("DOMContentLoaded", function(event){
                 currentplayer = "o"; 
                 if(checkwin(squares) == true)
                 {
-                    alert("Player x wins!")
+                    const delayInMilliseconds = 500;
+                    setTimeout(function() {
+                    alert("Chainsaws Win!")
+                }, delayInMilliseconds);
                 }
             }
             else if(currentplayer == "o")
             {
                 console.log("o player")
                 bttn.style.backgroundImage="url(log.jpg)"; 
-                bttn.style.backgroundSize='200px 150px'
+                bttn.style.backgroundSize='200px 150px';
                 squares[index] = 2; 
                 currentplayer = "x"; 
                 if(checkwin(squares) == true)
                 {
-                    alert("Player o wins!")
+                    const delayInMilliseconds = 500;
+                    setTimeout(function() {
+                    alert("Logs Win!")
+                }, delayInMilliseconds);
                 }
+            
             }
             else
             {
@@ -111,7 +118,11 @@ document.addEventListener("DOMContentLoaded", function(event){
         change(7)}); 
     document.getElementById("b9").addEventListener("click",() => {
         change(8)}); 
-    
+    document.getElementById("R1").addEventListener("click",() => {
+        resetGame() }); 
 }
 })
+function reloadPage() {
+    window.location.reload(); // Reload the page
+}
 
