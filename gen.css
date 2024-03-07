@@ -19,13 +19,34 @@
   transition-duration: 0.4s;
 }
 
+/*Reset Button Style*/
+.button {
+  background-color: rgb(255, 128, 0);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.button {
+  transition-duration: 0.4s;
+}
+
+.button:hover {
+  background-color: black; 
+  color: white;
+}
+
 /* Controls Color of Hover */
 .grid-container .grid-item button:hover {
   background-color: #000000;
   color: rgb(255, 128, 0);
 }
 
-/* Add a black background color to the top navigation */
+/* Add a orange background color to the top navigation */
 .topnav {
   background-color: rgb(255, 128, 0);
   overflow: hidden;
@@ -52,6 +73,7 @@
   background-color: black;
   color: rgb(255, 128, 0);
 }
+
 
 .card {
   /* Add shadows to create card */
