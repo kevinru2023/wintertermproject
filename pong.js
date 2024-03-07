@@ -14,16 +14,16 @@ let ballh= 200;
 let balld = 50; 
 
 //left paddle vars
-let pleftx= 0; 
+let pleftx= 50; 
 let plefty = 200; 
-let pleftw = 100; 
+let pleftw = 50; 
 let plefth = 200; 
 
 //right paddle vars 
-let prightx = 0; 
-let prighty = 0; 
-let prightw = 0; 
-let prighth = 0; 
+let prightx = 750; 
+let prighty = 200; 
+let prightw = 50; 
+let prighth = 200; 
 
 //vars to handle keyinputs 
 let up = false; 
@@ -77,14 +77,31 @@ function keyUp(event){
     }
 }
 
+function checkcollosions(b, p1, p2){
+    
+    if (b.left() < p1.right() && b.y > p1.top() && b.y < p1.bottom()) {
+        b.speedX = -b.speedX;
+        console.log("checked first statement");
+    }
+    
+    if (b.right() > p2.left() && b.y > p2.top() && b.y < p2.bottom()) {
+        b.speedX = -b.speedX;
+    }
+}
+
 //game loop 
 function drawGame(){
     clearScreen(); 
+    
     Ball.move();
     Ball.draw();
+    
     inputs(PaddleLeft);
     PaddleLeft.move();
-    PaddleLeft.draw();     
+    
+    PaddleLeft.draw();    
+    PaddleRight.draw(); 
+    checkcollosions(Ball, PaddleLeft, PaddleRight);
     requestAnimationFrame(drawGame);
     //requestanimation frame could be thought of as a way to recursivly call the function but being in sync with the refresh rate, shotout to chatgpt the best mentor on me understanding this cursed function
 }
@@ -116,6 +133,7 @@ class ballClass{
         if(this.bottom() < 0){
             this.speedY = -this.speedY; 
         }
+    
     }
     move(){
         this.y += this.speedY; 
@@ -184,6 +202,7 @@ Ball.speedY = randomint(-3,3);
 
 let PaddleLeft = new paddleClass(pleftx, plefty, pleftw, plefth);
 
+let PaddleRight = new paddleClass(prightx, prighty, prightw, prighth); 
 
 document.body.addEventListener("keydown",keyDown)
 document.body.addEventListener("keyup",keyUp)
