@@ -111,13 +111,11 @@ function checkcollisions(b, p1, p2){
     if (b.left() < p1.right() && b.y > p1.top() && b.y < p1.bottom()) {
         b.speedX = -b.speedX;
         b.speedY = pmap(b.y - p1.y, -p1.height/2, p1.height/2, -10, 10); 
-        console.log("checked");
     }
     
     if (b.right() > p2.left() && b.y > p2.top() && b.y < p2.bottom()) {
         b.speedX = -b.speedX;
-        b.speedY = pmap(b.y - p2.y, -p2.height/2, p2.height/2, -10, 10);
-        console.log("checked left"); 
+        b.speedY = pmap(b.y - p2.y, -p2.height/2, p2.height/2, -10, 10); 
     }
 }
 
@@ -158,13 +156,19 @@ class ballClass{
 
         if(this.right() > cwidth){
             scoreleft++; 
+            document.getElementById("Left").value = scoreleft.toString(); 
             this.x =  cwidth/2; 
             this.y = cheight/2; 
+            this.speedY = randomint(-3,3); 
+            this.speedX = 5; 
         }
         if(this.left() < 0){ 
-            scoreleft++; 
+            scoreright++; 
+            document.getElementById("Right").value = scoreright.toString(); 
             this.x =  cwidth/2; 
             this.y = cheight/2; 
+            this.speedY = randomint(-3,3); 
+            this.speedX = 5; 
         }
         if(this.top() > cheight){
             this.speedY = -this.speedY; 
