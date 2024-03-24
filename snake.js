@@ -102,7 +102,27 @@ class snakeobj{
     draw() {
         ctx.fillStyle = "Green"; 
         ctx.beginPath(); 
-        ctx.fillRect(this.x, this.y, this.width, this.height); 
+        //this reason for this is so that the x and y coordinates are the middle of the drawn rectangle
+        ctx.fillRect(this.x-this.width/2, this.y-this.height/2, this.width, this.height); 
+
+        if(this.left() < 0){
+            this.x = cwidth/2; 
+            this.y = cheight/2; 
+        }
+        if(this.right() > cwidth){
+            this.x = cwidth/2; 
+            this.y = cheight/2; 
+        }
+
+        if(this.top() < 0){
+            this.x = cwidth/2; 
+            this.y = cheight/2;
+        }
+        if(this.bottom() > cheight){
+            this.x = cwidth/2; 
+            this.y = cheight/2;
+        }
+       
     }
 
     move(){
