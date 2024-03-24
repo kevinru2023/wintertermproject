@@ -1,15 +1,17 @@
 const canvas = document.getElementById("gamearea"); 
 const ctx = canvas.getContext("2d"); 
-
+const speed = 2; 
 
 let cheight = canvas.height; 
 let cwidth = canvas.width; 
 
-let snakex = 100; 
-let snakey= 100; 
-let snakewidth = 100; 
-let snakeheight = 100; 
+//initial x and y are in the middle of canvas 
+let snakex = cwidth/2; 
+let snakey= cheight/2; 
+let snakewidth = 25; 
+let snakeheight = 25; 
 
+//input var 
 let up = false; 
 let down = false; 
 let right = false; 
@@ -59,30 +61,30 @@ function keyDown(event){
 //need to fix this because snake doesn't allow you to move diagonally. 
 function inputs(obj, u, d, r, l){
     //up and down arrow key logic 
-    if(u && !d){
-        obj.speedY = -5; 
+    if (r) {
+        obj.speedX = speed;
+        obj.speedY = 0;
+    } else if (l) {
+        obj.speedX = -speed;
+        obj.speedY = 0;
     }
-    else if(!u && d){
-        obj.speedY = 5; 
+
+    // Determine vertical movement
+    if (u) {
+        obj.speedX = 0;
+        obj.speedY = -speed;
+    } else if (d) {
+        obj.speedX = 0;
+        obj.speedY = speed;
     }
-    else{
-        obj.speedY = 0; 
-    }
-    
-    //right and left arrow key logic 
-    if(r && !l){
-        obj.speedX = 5; 
-    }
-    else if(!r && l){
-        obj.speedX = -5; 
-    }
-    else{
-        obj.speedX = 0; 
+
+    // Prevent simultaneous horizontal and vertical movement
+    if ((u || d) && (l || r)) {
+        obj.speedX = 0;
+        obj.speedY = 0;
     }
     
 }
-
-
 
 function clearScreen(){
     ctx.fillStyle = "black";
@@ -90,21 +92,21 @@ function clearScreen(){
 }
 
 class snakeobj{
-    constructor(x, y, width, height){
-        this.x = x; 
-        this.y = y; 
+    constructor(tempX, tempY, width, height){
+        this.x = tempX; 
+        this.y = tempY; 
         this.width = width; 
         this.height = height; 
+
         this.speedX = 0;
         this.speedY = 0; 
+        //array for body parts 
+        this.segments = []
+        //adding head position to this array
+        this.segments.push({x:this.x, y:this.y })
     }
     
-    draw() {
-        ctx.fillStyle = "Green"; 
-        ctx.beginPath(); 
-        //this reason for this is so that the x and y coordinates are the middle of the drawn rectangle
-        ctx.fillRect(this.x-this.width/2, this.y-this.height/2, this.width, this.height); 
-
+    borderCollison(){
         if(this.left() < 0){
             this.x = cwidth/2; 
             this.y = cheight/2; 
@@ -122,15 +124,43 @@ class snakeobj{
             this.x = cwidth/2; 
             this.y = cheight/2;
         }
-       
     }
-
+    
+    
+    drawHead() {
+        ctx.fillStyle = "Green"; 
+        ctx.beginPath(); 
+        //this reason for this is so that the x and y coordinates are the middle of the drawn rectangle
+        ctx.fillRect(this.x-this.width/2, this.y-this.height/2, this.width, this.height); 
+        
+        this.borderCollison();
+    }
+    
+    addSegment(u,d,l,r){
+        const lastseg = this.segments[this.segments.length - 1]; 
+        if (r){
+            this.segments.push({x:lastseg.x - this.width, y: lastseg.y});
+        }
+        else if (l){
+            this.segments.push({x:lastseg.x + this.width, y: lastseg.y});
+        }
+        else if (u) {
+            this.segments.push({x: lastseg.x, y: lastseg.y + this.height});
+        } 
+        else if (d) {
+            this.segments.push({x: lastseg.x, y: lastseg.y - this.height});
+        }
+    }
     move(){
         this.x += this.speedX;
         this.y += this.speedY;  
+        
+        //changing coords of head 
+        this.segments[0] = {x:this.x, y: this.y};
+
     }
 
-    //functions to help with collsions 
+    //functions to help with collsions with head 
     left(){
         return this.x - this.width/2; 
     }
@@ -150,7 +180,7 @@ function gameLoop(){
     
     inputs(snake, up, down, right, left); 
     snake.move();
-    snake.draw(); 
+    snake.drawHead(); 
 
     requestAnimationFrame(gameLoop);
 }
