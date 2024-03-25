@@ -1,6 +1,6 @@
 const canvas = document.getElementById("gamearea"); 
 const ctx = canvas.getContext("2d"); 
-const speed = 2; 
+const speed = 1; 
 
 let cheight = canvas.height; 
 let cwidth = canvas.width; 
@@ -10,6 +10,8 @@ let snakex = cwidth/2;
 let snakey= cheight/2; 
 let snakewidth = 25; 
 let snakeheight = 25; 
+
+let applesize = 25;
 
 //input var 
 let up = false; 
@@ -100,40 +102,26 @@ class snakeobj{
 
         this.speedX = 0;
         this.speedY = 0; 
-        //array for body parts 
-        this.segments = []
-        //adding head position to this array
-        this.segments.push({x:this.x, y:this.y })
+        //array for body parts and adding the head to this
+        this.segments = [{x:this.x, y:this.y }]
+
     }
     
     borderCollison(){
-        if(this.left() < 0){
-            this.x = cwidth/2; 
-            this.y = cheight/2; 
+        if (this.left() < 0 || this.right() > cwidth || this.top() < 0 || this.bottom() > cheight) {
+            // No need to update x and y here
+            return true; // Return true to indicate collision
         }
-        if(this.right() > cwidth){
-            this.x = cwidth/2; 
-            this.y = cheight/2; 
-        }
-
-        if(this.top() < 0){
-            this.x = cwidth/2; 
-            this.y = cheight/2;
-        }
-        if(this.bottom() > cheight){
-            this.x = cwidth/2; 
-            this.y = cheight/2;
-        }
+        return false; // Return false if no collision
     }
     
-    
-    drawHead() {
-        ctx.fillStyle = "Green"; 
-        ctx.beginPath(); 
+    draw() {
         //this reason for this is so that the x and y coordinates are the middle of the drawn rectangle
-        ctx.fillRect(this.x-this.width/2, this.y-this.height/2, this.width, this.height); 
-        
-        this.borderCollison();
+        for(let i = 0; i < this.segments.length; i++){
+            ctx.fillStyle = "Green"; 
+            ctx.beginPath(); 
+            ctx.fillRect(this.segments[i].x - this.width/2, this.segments[i].y, this.width, this.height);
+        }
     }
     
     addSegment(u,d,l,r){
@@ -155,37 +143,68 @@ class snakeobj{
         this.x += this.speedX;
         this.y += this.speedY;  
         
-        //changing coords of head 
-        this.segments[0] = {x:this.x, y: this.y};
+        for(let i = 0; i < this.segments.length; i++){
+            this.segments[i].x += this.speedX; 
+            this.segments[i].y += this.speedY; 
+        }
 
     }
 
     //functions to help with collsions with head 
     left(){
-        return this.x - this.width/2; 
+        return this.segments[0].x - this.width/2; 
     }
     right(){
-        return this.x + this.width/2; 
+        return this.segments[0].x + this.width/2; 
     }
     top(){
-        return this.y - this.height/2; 
+        return this.segments[0].y; 
     }
     bottom(){
-        return this.y + this.height/2; 
+        return this.segments[0].y + this.height; 
     }
 }
+//apple class from chatgpt cause im cooked on just snake logic and don't want to deal with apple spawn in logic 
+class Apple {
+    constructor(appleSize) {
+        this.appleSize = appleSize;
+        this.position = this.generateRandomPosition();
+    }
+
+    generateRandomPosition() {
+        const x = Math.floor(Math.random() * (cwidth - this.appleSize));
+        const y = Math.floor(Math.random() * (cheight - this.appleSize));
+        return { x, y };
+    }
+
+    draw() {
+        ctx.fillStyle = "red";
+        ctx.beginPath();
+        ctx.fillRect(this.position.x, this.position.y, this.appleSize,this.appleSize);
+    }
+}
+
 
 function gameLoop(){
     clearScreen();
     
     inputs(snake, up, down, right, left); 
     snake.move();
-    snake.drawHead(); 
+    snake.draw(); 
+    
+    apple.generateRandomPosition();
+    apple.draw();
 
+    if(snake.borderCollison()){
+        snake.segments = [{x:cwidth/2, y:cheight/2}]; 
+        snake.speedX = 0; 
+        snake.speedY = 0; 
+    }
     requestAnimationFrame(gameLoop);
 }
 
 let snake = new snakeobj(snakex, snakey, snakewidth, snakeheight); 
+let apple = new Apple(applesize)
 
 document.body.addEventListener("keydown",keyDown)
 document.body.addEventListener("keyup",keyUp)
