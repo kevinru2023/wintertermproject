@@ -1,6 +1,6 @@
 const canvas = document.getElementById("gamearea"); 
 const ctx = canvas.getContext("2d"); 
-const speed = 1; 
+const speed = 2; 
 
 let cheight = canvas.height; 
 let cwidth = canvas.width; 
@@ -58,6 +58,15 @@ function keyDown(event){
        down = true; 
    }
    
+}
+
+function isAppleOnSnake(apple,snake) {
+    for (let i = 0; i < snake.segments.length; i++) {
+        if (apple.position.x === snake.segments[i].x && apple.position.y === snake.segments[i].y) {
+            return true;
+        }
+    }
+    return false;
 }
 
 //need to fix this because snake doesn't allow you to move diagonally. 
@@ -125,6 +134,7 @@ class snakeobj{
     }
     
     addSegment(u,d,l,r){
+        console.log('added seg');
         const lastseg = this.segments[this.segments.length - 1]; 
         if (r){
             this.segments.push({x:lastseg.x - this.width, y: lastseg.y});
@@ -165,7 +175,7 @@ class snakeobj{
     }
 }
 //apple class from chatgpt cause im cooked on just snake logic and don't want to deal with apple spawn in logic 
-class Apple {
+class appleobj{
     constructor(appleSize) {
         this.appleSize = appleSize;
         this.position = this.generateRandomPosition();
@@ -184,27 +194,48 @@ class Apple {
     }
 }
 
+function applecheck(snake,apple){
+    while(isAppleOnSnake(apple,snake)){
+        apple.position = apple.generateRandomPosition();
+        isAppleOnSnake(apple,snake);
+    }
+}
 
 function gameLoop(){
+    let check = false; 
     clearScreen();
-    
+    //basic snake inputs, movement, and drawing 
     inputs(snake, up, down, right, left); 
     snake.move();
     snake.draw(); 
     
-    apple.generateRandomPosition();
+    apple.generateRandomPosition(); 
+    //if the apple's random position is on any part of the snake generate a new random position 
+    applecheck(snake,apple);
     apple.draw();
 
+    //if the snake hits the border reset it back to the middle with no new segments and make its body be 1 square big 
     if(snake.borderCollison()){
         snake.segments = [{x:cwidth/2, y:cheight/2}]; 
         snake.speedX = 0; 
         snake.speedY = 0; 
     }
+
+    for(let i = 0; i < snake.segments.length; i++){
+        if(snake.segments[i].x == apple.position.x || snake.segments[i].y == apple.position.y){
+            check = true;  
+        }
+    }
+    if(check){
+        snake.addSegment(up,down,left,right);
+        apple.position = apple.generateRandomPosition();
+        apple.draw(); 
+    }
     requestAnimationFrame(gameLoop);
 }
 
 let snake = new snakeobj(snakex, snakey, snakewidth, snakeheight); 
-let apple = new Apple(applesize)
+let apple = new appleobj(applesize)
 
 document.body.addEventListener("keydown",keyDown)
 document.body.addEventListener("keyup",keyUp)
