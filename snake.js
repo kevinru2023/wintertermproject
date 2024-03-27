@@ -1,22 +1,19 @@
+//constant variables for canvas and grid 
 const canvas = document.getElementById("gamearea"); 
 const ctx = canvas.getContext("2d"); 
 const gridSize = 25; 
 const speed = gridSize; 
-
-let cheight = canvas.height; 
-let cwidth = canvas.width; 
-
-//making variables to keep track of grid 
 const numCols = Math.floor(canvas.width / gridSize);
 const numRows = Math.floor(canvas.height / gridSize);
 
-
+//inital snake variables 
 let initsnakeX = Math.floor(numRows / 2) * gridSize; // Start in the middle of the grid
 let initsnakeY = Math.floor(numCols / 2) * gridSize;
-let snakewidth = gridSize; 
-let snakeheight = gridSize; 
+let snakeWidth = gridSize; 
+let snakeHeight = gridSize; 
 
-let applesize = gridSize;
+//apple vars 
+let appleSize = gridSize;
 
 //input var 
 let up = false; 
@@ -24,7 +21,16 @@ let down = false;
 let right = false; 
 let left = false; 
 
-//only need key down cause you don't hold down a key
+//vars for frame rate 
+let frameCount = 0;
+let targetFPS = 10;
+let updateInterval = Math.round(60 / targetFPS);
+
+function clearScreen(){
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0 , canvas.width, canvas.height);
+}
+//function for key inputs, only need a function for keydown in this case 
 function keyDown(event){
     //left arrow key 
     if (event.keyCode == 37){
@@ -61,17 +67,7 @@ function keyDown(event){
    
 }
 
-//function to help with apple not generating on top of snake 
-function isAppleOnSnake(apple,snake) {
-    for (let i = 0; i < snake.segments.length; i++) {
-        if (apple.position.x === snake.segments[i].x && apple.position.y === snake.segments[i].y) {
-            return true;
-        }
-    }
-    return false;
-}
-
-//need to fix this because snake doesn't allow you to move diagonally. also think maybe a different approach would be better maybe like moving the snake a
+//functions for inputs 
 function inputs(obj, u, d, r, l){
     //up and down arrow key logic 
     if (r) {
@@ -99,12 +95,62 @@ function inputs(obj, u, d, r, l){
     
 }
 
-function clearScreen(){
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0 , canvas.width, canvas.height);
+//function to check whether or not the apple is on the snake. 
+function isAppleOnSnake(apple,snake) {
+    for (let i = 0; i < snake.segments.length; i++) {
+        if (apple.position.x === snake.segments[i].x && apple.position.y === snake.segments[i].y) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//checking if the random apple generated is on the snake if so genereate a new one 
+function applecheck(snake,apple){
+    while(isAppleOnSnake(apple,snake)){
+        apple.position = apple.generateRandomPosition();
+        isAppleOnSnake(apple,snake);
+    }
+}
+
+//main game loop
+function gameLoop(){ 
+    //15 frames per second instead of 60 
+    frameCount++; 
+    if (frameCount >= updateInterval) {
+        frameCount = 0; 
+
+        //basic snake inputs, movement, and drawing 
+        clearScreen();
+        inputs(snake, up, down, right, left); 
+        snake.move();
+        snake.draw(); 
+        
+        apple.draw();
+
+        //if the snake hits the border reset it back to the middle with no new segments and make its body be 1 square big 
+        if(snake.borderCollison()){
+            snake.segments = [{x: Math.floor(numRows / 2) , y: Math.floor(numCols / 2)}]; 
+            snake.speedX = 0; 
+            snake.speedY = 0; 
+            up = false;
+            down = false; 
+            right = false; 
+            left = false; 
+        }
+        
+        //if snake eats apple, genereate new position that isn't on snake 
+        if (isAppleOnSnake){
+            snake.addSeg(); 
+            apple.generateRandomPosition();
+            applecheck(snake,apple);
+        }
+    }
+    requestAnimationFrame(gameLoop);
 }
 
 class snakeobj{
+    //most variables here are in grid units instead of pixel units
     constructor(tempX, tempY, width, height){
         //setting x and y in terms of grid units
         this.x = Math.floor(tempX / gridSize); 
@@ -141,12 +187,15 @@ class snakeobj{
         this.segments[0].y += this.speedY / gridSize;  
         
         for(let i = 1; i < this.segments.length; i++){
-            this.segments[i].x += this.segments[i-1].x; 
-            this.segments[i].y += this.segments[i-1].y; 
+            this.segments[i].x = this.segments[i-1].x - this.speedX / gridSize;
+            this.segments[i].y = this.segments[i-1].y - this.speedY / gridSize; 
         }
 
     }
-
+    addSeg(){
+        let lastseg = this.segments[this.segments.length - 1]; 
+        this.segments.push({x: lastseg.x, y:lastseg.y}); 
+    }
     //functions to help with collsions with head also gridsize is here to get exact pixel 
     left(){
         return this.segments[0].x; 
@@ -170,8 +219,8 @@ class appleobj{
 
     generateRandomPosition() {
         //generate a random position in grid units 
-        const x = Math.floor(Math.random() * (cwidth / gridSize));
-        const y = Math.floor(Math.random() * (cheight / gridSize));
+        const x = Math.floor(Math.random() * (canvas.width / gridSize));
+        const y = Math.floor(Math.random() * (canvas.height / gridSize));
         return { x, y };
     }
 
@@ -182,54 +231,14 @@ class appleobj{
     }
 }
 
-function applecheck(snake,apple){
-    while(isAppleOnSnake(apple,snake)){
-        apple.position = apple.generateRandomPosition();
-        isAppleOnSnake(apple,snake);
-    }
-}
-//variables for frame rate
-let frameCount = 0;
-let targetFPS = 15;
-let updateInterval = Math.round(60 / targetFPS);
-
-
-function gameLoop(){ 
-    //15 frames per second instead of 60 
-    frameCount++; 
-    if (frameCount >= updateInterval) {
-        frameCount = 0; 
-        //basic snake inputs, movement, and drawing 
-        
-        clearScreen();
-        inputs(snake, up, down, right, left); 
-        snake.move();
-        snake.draw(); 
-        
-        apple.generateRandomPosition(); 
-        //if the apple's random position is on any part of the snake generate a new random position 
-        applecheck(snake,apple);
-        apple.draw();
-
-        //if the snake hits the border reset it back to the middle with no new segments and make its body be 1 square big 
-        if(snake.borderCollison()){
-            snake.segments = [{x: Math.floor(numRows / 2) , y: Math.floor(numCols / 2)}]; 
-            snake.speedX = 0; 
-            snake.speedY = 0; 
-            up = false;
-            down = false; 
-            right = false; 
-            left = false; 
-        }
-        //checks for seeing if snake has touched apple 
-    }
-    requestAnimationFrame(gameLoop);
-}
-
-let snake = new snakeobj(initsnakeX, initsnakeY, snakewidth, snakeheight); 
-let apple = new appleobj(applesize)
+let snake = new snakeobj(initsnakeX, initsnakeY, snakeWidth, snakeHeight); 
+let apple = new appleobj(appleSize);
 
 document.body.addEventListener("keydown",keyDown)
+
+//initalizing the apple at a random position here so we don't have to do in the loop many times. 
+apple.generateRandomPosition();
+applecheck(snake,apple); 
 
 gameLoop(); 
 
