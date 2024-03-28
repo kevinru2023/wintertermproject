@@ -120,7 +120,17 @@ function gameLoop(){
     if (frameCount >= updateInterval) {
         frameCount = 0; 
         clearScreen(); 
-
+        
+        //same as below but with body collisons instead 
+        if(snake.bodyCollison()){
+            snake.segments = [{x: Math.floor(numRows / 2) , y: Math.floor(numCols / 2)}]; 
+            snake.speedX = 0; 
+            snake.speedY = 0; 
+            up = false;
+            down = false; 
+            right = false; 
+            left = false; 
+        }
         //if the snake hits the border reset it back to the middle with no new segments and make its body be 1 square big 
         if(snake.borderCollison()){
             snake.segments = [{x: Math.floor(numRows / 2) , y: Math.floor(numCols / 2)}]; 
@@ -173,8 +183,23 @@ class snakeobj{
         return false; // Return false if no collision
     }
     
+    bodyCollison(){
+        for(let i = 1; i < this.segments.length; i++)
+        {
+            if(this.segments[0].x == this.segments[i].x && this.segments[0].y == this.segments[i].y){
+                return true 
+            }
+        }
+        return false; 
+    }
+
     draw() {
-        for(let i = 0; i < this.segments.length; i++){
+        //make head orange
+        ctx.fillStyle = "Orange";
+        ctx.beginPath(); 
+        ctx.fillRect(this.segments[0].x * gridSize, this.segments[0].y * gridSize, this.width, this.height);
+        //make the rest of the body green
+        for(let i = 1; i < this.segments.length; i++){
             ctx.fillStyle = "Green";
             ctx.beginPath(); 
             // Draw the segment at the calculated position the * gridsize is to change into pixel units instead of grid units 
@@ -186,7 +211,10 @@ class snakeobj{
         //position for head after movement 
         let newX = this.segments[0].x + this.speedX / gridSize;
         let newY = this.segments[0].y + this.speedY / gridSize;  
-        
+
+        //shoutout to the freeCodeCamp for this, I was losing my mind over figuring out how to do this with a for loop 
+        //all this is doing is removing the last element say [1,2,3] -> [1,2], then adding in a new element with unshift so lets say we add 3 -> [3,1,2]
+        //this is the same as moving the snake using previous elements 
         this.segments.pop(); 
         this.segments.unshift({x:newX, y:newY}); 
 
@@ -195,9 +223,8 @@ class snakeobj{
         //adding an element to the array but it's gonna have the same value as the last index so the last two elements are identical 
         let lastseg = this.segments[this.segments.length - 1]; 
         this.segments.push({x: lastseg.x, y:lastseg.y}); 
-        console.log(this.segments);
     }
-    //functions to help with collsions with head
+    //functions to help with collsions with head and border 
     left(){
         return this.segments[0].x; 
     }
