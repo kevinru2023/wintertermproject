@@ -183,18 +183,19 @@ class snakeobj{
     }
         
     move(){
-        this.segments[0].x += this.speedX / gridSize;
-        this.segments[0].y += this.speedY / gridSize;  
-
-        for(let i = 1; i < this.segments.length; i++){
-            this.segments[i].x = this.segments[i-1].x 
-            this.segments[i].y = this.segments[i-1].y 
-        }
+        //position for head after movement 
+        let newX = this.segments[0].x + this.speedX / gridSize;
+        let newY = this.segments[0].y + this.speedY / gridSize;  
+        
+        this.segments.pop(); 
+        this.segments.unshift({x:newX, y:newY}); 
 
     }
     addSeg(){
+        //adding an element to the array but it's gonna have the same value as the last index so the last two elements are identical 
         let lastseg = this.segments[this.segments.length - 1]; 
         this.segments.push({x: lastseg.x, y:lastseg.y}); 
+        console.log(this.segments);
     }
     //functions to help with collsions with head
     left(){
